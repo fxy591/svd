@@ -151,12 +151,12 @@ class SvdDownloaderMiddleware:
 
 
 class TestProxyMiddleware(object):
-    _proxy = ('j249.kdltps.com', '15818')
+    _proxy = ('n419.kdltps.com', '15818')
 
     def process_request(self, request, spider):
         # 用户名密码认证
-        username = "t17748853944251"
-        password = "9pe4ivti"
+        username = "t17781792274249"
+        password = "nmudozhr"
         request.meta['proxy'] = "http://%(user)s:%(pwd)s@%(proxy)s/" % {"user": username, "pwd": password,
                                                                         "proxy": ':'.join(
                                                                             TestProxyMiddleware._proxy)}
@@ -174,7 +174,7 @@ class TestProxyMiddleware(object):
 
         request.headers["Connection"] = "close"
         # request.meta["proxy"] = entry
-        print(f"TestProxyMiddleware --> {request.meta['proxy']}")
+        # print(f"TestProxyMiddleware --> {request.meta['proxy']}")
         return None
 
 class ProcessAllExceptionMiddleware(object):

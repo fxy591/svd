@@ -19,6 +19,7 @@ class NvdSpider(scrapy.Spider):
             yield scrapy.Request(
                 url=response.urljoin(href),  # 自动拼接URL
                 method='get',
+                dont_filter=True,
                 callback=self.parse_riqi  # 返回数据的解析函数  回调函数
             )
             # break
@@ -42,6 +43,7 @@ class NvdSpider(scrapy.Spider):
 
             yield scrapy.Request(
                 url=cve_url,
+                dont_filter=True,
                 callback=self.parse_detail
             )
             # if i == 5:

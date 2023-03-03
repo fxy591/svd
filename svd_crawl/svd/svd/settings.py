@@ -6,6 +6,7 @@
 #     https://docs.scrapy.org/en/latest/topics/settings.html
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
+from scrapy.settings.default_settings import RETRY_ENABLED
 
 BOT_NAME = "svd"
 
@@ -21,7 +22,7 @@ ROBOTSTXT_OBEY = False
 LOG_LEVEL = "WARNING"
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-#CONCURRENT_REQUESTS = 32
+CONCURRENT_REQUESTS = 32
 
 # Configure a delay for requests for the same website (default: 0)
 # See https://docs.scrapy.org/en/latest/topics/settings.html#download-delay
@@ -53,8 +54,8 @@ CONCURRENT_REQUESTS_PER_DOMAIN = 16
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
    "svd.middlewares.SvdDownloaderMiddleware": 98,
-   "svd.middlewares.ProcessAllExceptionMiddleware": 99
-   # "svd.middlewares.TestProxyMiddleware": 98
+   "svd.middlewares.ProcessAllExceptionMiddleware": 99,
+   "svd.middlewares.TestProxyMiddleware": 97
 }
 
 # Enable or disable extensions
@@ -71,7 +72,7 @@ ITEM_PIPELINES = {
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
-#AUTOTHROTTLE_ENABLED = True
+AUTOTHROTTLE_ENABLED = True
 # The initial download delay
 #AUTOTHROTTLE_START_DELAY = 5
 # The maximum download delay to be set in case of high latencies
@@ -102,3 +103,6 @@ MYSQL = {
    "password": "123456",
    "database": "svd"
 }
+
+RETRY_ENABLED = True
+DOWNLOAD_FAIL_ON_DATALOSS = False

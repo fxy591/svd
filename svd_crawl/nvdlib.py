@@ -54,6 +54,7 @@ class NvdlibSpider(scrapy.Spider):
             yield scrapy.Request(
                 url=response.urljoin(href),   # 自动拼接URL
                 method='get',
+                dont_filter=True,
                 callback=self.parse_riqi      # 返回数据的解析函数  回调函数
             )
             # 当回调结束后 会继续执行后面的代码
