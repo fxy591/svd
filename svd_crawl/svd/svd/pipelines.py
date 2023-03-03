@@ -60,8 +60,8 @@ class SvdPipeline:
                 # data = cursor.fetchone()
                 print(item)
                 print(type(str(item['cve_id'])))
-                sql = "insert into SVD_COMPONENT_INFO (group_id, artfact_id, version, cve_id) values (:group_id, :artfact_id, :version, :cve_id)"
-                cursor.execute(sql, (item['group_id'], item['artfact_id'], item['version'], str(item['cve_id'])))
+                sql = "insert into SVD_COMPONENT_INFO (group_id, artifact_id, version, cve_id) values (:group_id, :artifact_id, :version, :cve_id)"
+                cursor.execute(sql, (item['group_id'], item['artifact_id'], item['version'], str(item['cve_id'])))
                 self.conn.commit()
             except Exception as e:
                 print("错误：{}".format(e))

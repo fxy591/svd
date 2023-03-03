@@ -10,7 +10,7 @@ class SvdItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
     group_id = scrapy.Field()
-    artfact_id = scrapy.Field()
+    artifact_id = scrapy.Field()
     version = scrapy.Field()
     cve_id = scrapy.Field()
 

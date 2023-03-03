@@ -170,7 +170,7 @@ class MavenSpider(scrapy.Spider):
         str = response.url.split("/")
 
         svd['group_id'] = str[-3]
-        svd['artfact_id'] = str[-2]
+        svd['artifact_id'] = str[-2]
         svd['version'] = str[-1]
         print("parse_version")
 
