@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:util="http://www.springframework.org/schema/util" xmlns:context="http://www.springframework.org/schema/context"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util  http://www.springframework.org/schema/util/spring-util.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
+        default-autowire="no">
+
+    <!--加载配置文件-->
+    <context:property-placeholder location="classpath:resource.properties" ignore-unresolvable="true"/>
+
+    <!-- 自动扫描bean -->
+<!--    <context:component-scan base-package="com.chsi.svd.**.handler" />-->
+<!--    <context:component-scan base-package="com.chsi.svd.**.utils" />-->
+
+    <!-- 加载 server.properties配置信息 -->
+    <bean id="sysPropertyConfigurer" class="com.chsi.framework.config.spring.ConfigurablePropertyPlaceholder">
+        <property name="propertyLocationSystemProperty" value="propertyPath"/>
+        <property name="defaultPropertyFileName" value="server.properties"/>
+        <property name="ignoreResourceNotFound" value="false"/>
+    </bean>
+
+    <!-- 加载beanRefContext.xml配置信息 -->
+    <bean id="locator" class="com.chsi.framework.service.BeanLocator" init-method="init">
+        <property name="beanFactoryLocatorKey" value="servicelayer-context-svd"/>
+        <property name="factoryLocatorSelector" value="META-INF/conf/svd/beanRefContext.xml"/>
+        <property name="dbProviderName" value="dbProvider"/>
+    </bean>
+
+    <bean id="requireCsrfProtectionMatcher" class="com.chsi.framework.csrf.web.CsrfRequestMatcherImpl">
+        <property name="protectedMethods">
+            <util:set id="protectedMethods" set-class="java.util.HashSet">
+                <value>POST</value>
+            </util:set>
+        </property>
+        <property name="protectedPages">
+            <util:set id="protectedPages" set-class="java.util.HashSet">
+                <value>/*</value>
+            </util:set>
+        </property>
+        <property name="protectConfiged" value="true"/>
+    </bean>
+    <bean id="chsiCsrfFilter" class="com.chsi.framework.csrf.web.filter.CsrfFilter">
+        <constructor-arg index="0" value="cookie"/>
+        <property name="requireCsrfProtectionMatcher" ref="requireCsrfProtectionMatcher"/>
+    </bean>
+
+<!--    <bean id="redisUtil" class="com.chsi.svd.util.RedisUtil">-->
+<!--        <property name="redisTemplate" ref="redisTemplate"/>-->
+<!--    </bean>-->
+
+<!--    <bean id="lobDbServiceClient" class="com.chsi.lobdb.client.LobDbServiceClientFactory"-->
+<!--            factory-method="getLobDbServiceClient"/>-->
+
+   <!-- 服务层 -->
+    <bean id="componentService" class="com.chsi.svd.service.Impl.ComponentServiceImpl" init-method="create" destroy-method="remove">
+        <property name="locator" ref="locator" />
+    </bean>
+    <bean id="cveService" class="com.chsi.svd.service.Impl.CveServiceImpl" init-method="create" destroy-method="remove">
+        <property name="locator" ref="locator" />
+    </bean>
+<!--    <bean id="userDetailsService" class="com.chsi.svd.user.impl.UserDetailsServiceImpl" init-method="create"-->
+<!--            destroy-method="remove">-->
+<!--        <property name="locator" ref="locator"/>-->
+<!--    </bean>-->
+<!--    <bean id="corpCheckPassService" class="com.chsi.corp.dwk.service.impl.CorpCheckPassServiceImpl" init-method="create"-->
+<!--            destroy-method="remove">-->
+<!--        <property name="locator" ref="locator"/>-->
+<!--    </bean>-->
+<!--    <bean id="corpCheckFailedService" class="com.chsi.corp.dwk.service.impl.CorpCheckFailedServiceImpl"-->
+<!--            init-method="create" destroy-method="remove">-->
+<!--        <property name="locator" ref="locator"/>-->
+<!--    </bean>-->
+<!--    <bean id="corpCheckWaitService" class="com.chsi.corp.dwk.service.impl.CorpCheckWaitServiceImpl" init-method="create"-->
+<!--            destroy-method="remove">-->
+<!--        <property name="locator" ref="locator"/>-->
+<!--    </bean>-->
+<!--    <bean id="corpGsbbRecordService" class="com.chsi.corp.dwk.service.impl.CorpGsbbRecordServiceImpl" init-method="create"-->
+<!--            destroy-method="remove">-->
+<!--        <property name="locator" ref="locator"/>-->
+<!--    </bean>-->
+<!--    <bean id="corpTycRecordService" class="com.chsi.corp.dwk.service.impl.CorpTycRecordServiceImpl" init-method="create"-->
+<!--            destroy-method="remove">-->
+<!--        <property name="locator" ref="locator"/>-->
+<!--    </bean>-->
+<!--    <bean id="corpDyLogService" class="com.chsi.corp.dwk.service.impl.CorpDyLogServiceImpl" init-method="create"-->
+<!--            destroy-method="remove">-->
+<!--        <property name="locator" ref="locator"/>-->
+<!--    </bean>-->
+
+<!--    <bean id="corpCheckService" class="com.chsi.corp.dwk.service.impl.CorpCheckServiceImpl">-->
+<!--        <property name="corpCheckPassService" ref="corpCheckPassService"/>-->
+<!--        <property name="corpCheckFailedService" ref="corpCheckFailedService"/>-->
+<!--        <property name="corpCheckWaitService" ref="corpCheckWaitService"/>-->
+<!--        <property name="companyInfoService" ref="companyInfoService"/>-->
+<!--    </bean>-->
+
+<!--    <bean id="handleLogService" class="com.chsi.corp.log.service.impl.HandleLogServiceImpl" init-method="create"-->
+<!--            destroy-method="remove">-->
+<!--        <property name="locator" ref="locator"/>-->
+<!--    </bean>-->
+
+<!--    <bean id="rgCheckService" class="com.chsi.corp.dwk.service.impl.RgCheckServiceImpl" init-method="create"-->
+<!--            destroy-method="remove">-->
+<!--        <property name="locator" ref="locator"/>-->
+<!--    </bean>-->
+
+<!--    <bean id="dictionaryService" class="com.chsi.corp.dwk.service.impl.DictionaryServiceImpl" init-method="create"-->
+<!--            destroy-method="remove">-->
+<!--        <property name="locator" ref="locator"/>-->
+<!--    </bean>-->
+
+<!--    <bean id="companyInfoService" class="com.chsi.corp.dwk.service.impl.CompanyInfoServiceImpl" init-method="create"-->
+<!--            destroy-method="remove">-->
+<!--        <property name="locator" ref="locator"/>-->
+<!--    </bean>-->
+
+</beans>

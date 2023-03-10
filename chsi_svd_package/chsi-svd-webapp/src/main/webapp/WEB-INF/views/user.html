@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户管理</title>
+    <!-- 引入样式 -->
+    <!--    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">-->
+    <!-- 引入组件库 -->
+    <!--    <script src="https://unpkg.com/element-ui/lib/index.js"></script>-->
+    <!--    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14"></script>-->
+</head>
+<body>
+<div id="app" style="height: 100%">
+    <el-container style="height: 100%; border: 1px solid #eee">
+        <el-aside width="200px" style="background-color: rgb(238, 241, 246); height: 100%">
+            <el-menu :default-active="3">
+                <el-submenu index="1">
+                    <template slot="title"><i class="el-icon-message"></i>漏洞信息</template>
+                </el-submenu>
+                <el-submenu index="2">
+                    <template slot="title"><i class="el-icon-menu"></i>项目检测</template>
+                    <el-menu-item-group>
+                        <template slot="title">项目检测</template>
+                    </el-menu-item-group>
+                    <el-menu-item index="2-3">任务列表</el-menu-item>
+                    <el-menu-item index="2-4">历史检测记录</el-menu-item>
+                </el-submenu>
+                <el-submenu index="3">
+                    <template slot="title"><i class="el-icon-setting"></i>jar包检测</template>
+                </el-submenu>
+                <el-submenu index="4">
+                    <template slot="title"><i class="el-icon-setting"></i>爬取新库</template>
+                </el-submenu>
+                <el-submenu index="5">
+                    <template slot="title"><i class="el-icon-setting"></i>情报订阅</template>
+                </el-submenu>
+                <el-submenu index="6">
+                    <template slot="title"><i class="el-icon-setting"></i>用户管理</template>
+                </el-submenu>
+            </el-menu>
+        </el-aside>
+
+        <el-container>
+            <el-header style="text-align: right; font-size: 12px">
+                <span>王小虎</span>
+                <el-dropdown>
+                    <i class="el-icon-setting" style="margin-right: 15px"></i>
+                    <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item>修改信息</el-dropdown-item>
+                        <el-dropdown-item>退出登录</el-dropdown-item>
+                    </el-dropdown-menu>
+                </el-dropdown>
+            </el-header>
+
+            <el-main>
+                <div style="width: 100%">
+                    <el-button @click="dialogFormVisible = true" type="text" icon="CirclePlus">添加</el-button>
+                </div>
+                <el-table :data="tableData" stripe>
+                    <el-table-column prop="id" label="序号" width="50" type="index" align="center"
+                                     :index="index=>index+1">
+                    </el-table-column>
+                    <el-table-column prop="name" label="姓名" align="center">
+                        <template #default="scope">
+                            <span v-show="!scope.row.editFlag">{{scope.row.name}}</span>
+                            <el-input v-show="scope.row.editFlag"
+                                      v-model="scope.row.name">
+                            </el-input>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="phone" label="手机" align="center">
+                        <template #default="scope">
+                            <span v-show="!scope.row.editFlag">{{scope.row.phone}}</span>
+                            <el-input v-show="scope.row.editFlag"
+                                      v-model="scope.row.phone">
+                            </el-input>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="email" label="邮箱" width="300" align="center">
+                        <template #default="scope">
+                            <span v-show="!scope.row.editFlag">{{scope.row.email}}</span>
+                            <el-input v-show="scope.row.editFlag"
+                                      v-model="scope.row.email">
+                            </el-input>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="depart" label="部门" align="center">
+                        <template #default="scope">
+                            <span v-show="!scope.row.editFlag">{{scope.row.depart}}</span>
+                            <el-input v-show="scope.row.editFlag"
+                                      v-model="scope.row.depart">
+                            </el-input>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="position" label="职位" th:align="center">
+                        <template #default="scope">
+                            <span v-show="!scope.row.editFlag">{{scope.row.position}}</span>
+                            <el-input v-show="scope.row.editFlag"
+                                      v-model="scope.row.position">
+                            </el-input>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="role" label="角色" th:align="center">
+                        <template #default="scope">
+                            <span v-show="!scope.row.editFlag">{{scope.row.role}}</span>
+                            <el-input v-show="scope.row.editFlag"
+                                      v-model="scope.row.role">
+                            </el-input>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="操作" width="120" align="center">
+                        <template #default="scope">
+                            <div style="display: flex;">
+                                <el-button size="small"
+                                           type="text"
+                                           icon="CircleCheck"
+                                           v-show="scope.row.editFlag"
+                                           @click="submit(scope.row)">确定
+                                </el-button>
+                                <el-button size="small"
+                                           type="text"
+                                           icon="CircleClose"
+                                           v-show="scope.row.editFlag"
+                                           @click="cancel(scope.row,scope.$index)">取消
+                                </el-button>
+                                <el-button size="small"
+                                           icon="Edit"
+                                           type="text"
+                                           v-show="!scope.row.editFlag"
+                                           @click="edit(scope.row)"> 编辑
+                                </el-button>
+                                <el-button size="small"
+                                           icon="Delete"
+                                           type="text"
+                                           v-show="!scope.row.editFlag"
+                                           @click="del(scope.row.$index)">删除
+                                </el-button>
+                            </div>
+                        </template>
+                    </el-table-column>
+                </el-table>
+
+                <el-dialog title="添加用户" :visible.sync="dialogFormVisible">
+                    <el-form :model="form" th:method="post" th:action="${pageContext.request.contextPath}/user/add">
+                        <el-form-item label="姓名" :label-width="formLabelWidth">
+                            <el-input v-model="form.name" autocomplete="off"></el-input>
+                        </el-form-item>
+                        <el-form-item label="手机" :label-width="formLabelWidth">
+                            <el-input v-model="form.phone" autocomplete="off"></el-input>
+                        </el-form-item>
+                        <el-form-item label="邮箱" :label-width="formLabelWidth">
+                            <el-input v-model="form.email" autocomplete="off"></el-input>
+                        </el-form-item>
+                        <el-form-item label="部门" :label-width="formLabelWidth">
+                            <el-input v-model="form.depart" autocomplete="off"></el-input>
+                        </el-form-item>
+                        <el-form-item label="职位" :label-width="formLabelWidth">
+                            <el-input v-model="form.position" autocomplete="off"></el-input>
+                        </el-form-item>
+                        <el-form-item label="角色" :label-width="formLabelWidth">
+                            <el-select v-model="form.role" placeholder="请选择活动区域">
+                                <el-option label="普通员工" value="1"></el-option>
+                                <el-option label="部门管理员" value="2"></el-option>
+                                <el-option label="超级管理员" value="3"></el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-form>
+                    <div slot="footer" class="dialog-footer">
+                        <el-button @click="dialogFormVisible = false">取 消</el-button>
+                        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+                    </div>
+                </el-dialog>
+            </el-main>
+        </el-container>
+    </el-container>
+</div>
+
+
+<style>
+    .el-header {
+        background-color: #B3C0D1;
+        color: #333;
+        line-height: 60px;
+    }
+
+    .el-aside {
+        color: #333;
+    }
+</style>
+
+<script src="https://cdn.bootcdn.net/ajax/libs/axios/1.2.5/axios.js"></script>
+<script src="../../js/vue.js"></script>
+<script src="../../element-ui/lib/index.js"></script>
+<link rel="stylesheet" href="../../element-ui/lib/theme-chalk/index.css">
+
+<script th:inline="javascript">
+
+    new Vue({
+        el: "#app",
+        mounted(){
+            // alert("!!!")
+        },
+        methods: {
+            add(){
+                dialogFormVisible = true
+            },
+        },
+        data() {
+            return {
+                dialogFormVisible: false,
+                tableData: {
+                    name: '',
+                    phone: '',
+                    email: '',
+                    depart: '',
+                    position: '',
+                    role: '',
+                    editFlag: false,
+                    isSubmit: false, // 是否点击确定标识
+                },
+                formLabelWidth: '120px',
+                form: {
+                    name: '',
+                    phone: '',
+                    email: '',
+                    depart: '',
+                    position: '',
+                    role: '',
+                },
+
+            };
+        }
+    })
+</script>
+
+</body>
+</html>

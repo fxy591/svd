@@ -1,0 +1,200 @@
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+
+<!--	<bean id="rollbackCacheOnDbRollbackAspect" class="com.chsi.cache.aspect.RollbackCacheOnDbRollbackAspect" />-->
+<!--	<bean id="deleteCacheOnDbCommitAspect" class="com.chsi.cache.aspect.DeleteCacheOnDbCommitAspect" />-->
+<!--	<bean id="flushGroupOnDbCommitAspect" class="com.chsi.cache.aspect.FlushGroupOnDbCommitAspect" />-->
+<!--	<aop:config proxy-target-class="true">-->
+<!--		<aop:pointcut id="cutSet0"-->
+<!--			expression="execution(* com.chsi..CacheClient+.set*(java.lang.String,java.lang.Object))" />-->
+<!--		<aop:pointcut id="cutSet1"-->
+<!--			expression="execution(* com.chsi..CacheClient+.set*(java.lang.String,java.lang.Object,java.util.Date))" />-->
+<!--		<aop:pointcut id="cutAdd0"-->
+<!--			expression="execution(* com.chsi..CacheClient+.add*(java.lang.String,java.lang.Object))" />-->
+<!--		<aop:pointcut id="cutAdd1"-->
+<!--			expression="execution(* com.chsi..CacheClient+.add*(java.lang.String,java.lang.Object,java.util.Date))" />-->
+<!--		<aop:pointcut id="cutDelete" expression="execution(* com.chsi..CacheClient+.delete*(java.lang.String))" />-->
+<!--		<aop:pointcut id="cutFlush" expression="execution(* com.chsi..CacheClient+.flushGroups*(java.lang.String[]))" />-->
+<!--		<aop:aspect ref="rollbackCacheOnDbRollbackAspect">-->
+<!--			<aop:before method="before" pointcut-ref="cutSet0" />-->
+<!--			<aop:before method="before" pointcut-ref="cutSet1" />-->
+<!--			<aop:before method="before" pointcut-ref="cutAdd0" />-->
+<!--			<aop:before method="before" pointcut-ref="cutAdd1" />-->
+<!--		</aop:aspect>-->
+<!--		<aop:aspect ref="deleteCacheOnDbCommitAspect">-->
+<!--			<aop:before method="before" pointcut-ref="cutDelete" />-->
+<!--		</aop:aspect>-->
+<!--		<aop:aspect ref="flushGroupOnDbCommitAspect">-->
+<!--			<aop:before method="before" pointcut-ref="cutFlush" />-->
+<!--		</aop:aspect>-->
+<!--	</aop:config>-->
+
+	<bean class="com.chsi.framework.config.spring.ConfigurablePropertyPlaceholder">
+		<property name="propertyLocationSystemProperty" value="propertyPath" />
+		<property name="defaultPropertyFileName" value="server.properties" />
+		<property name="ignoreResourceNotFound" value="false" />
+	</bean>
+
+	<bean id="sysPlaceholder" class="com.chsi.framework.config.spring.ConfigurablePropertyPlaceholder">
+		<property name="propertyLocationSystemProperty" value="propertyPath" />
+		<property name="defaultPropertyFileName" value="server.properties" />
+		<property name="ignoreResourceNotFound" value="false" />
+	</bean>
+	<bean id="wall-filter-config" class="com.alibaba.druid.wall.WallConfig">
+		<property name="selectIntoAllow" value="false"></property>
+		<property name="replaceAllow" value="false"></property>
+		<property name="mergeAllow" value="false"></property>
+		<property name="callAllow" value="false"></property>
+		<property name="setAllow" value="false"></property>
+		<property name="truncateAllow" value="false"></property>
+		<property name="createTableAllow" value="false"></property>
+		<property name="alterTableAllow" value="false"></property>
+		<property name="dropTableAllow" value="false"></property>
+		<property name="deleteWhereNoneCheck" value="true"></property>
+		<property name="updateWhereNoneCheck" value="true"></property>
+		<property name="conditionAndAlwayTrueAllow" value="false"></property>
+		<property name="conditionAndAlwayFalseAllow" value="false"></property>
+		<property name="mustParameterized" value="true"></property>
+	</bean>
+	<bean id="wall-filter" class="com.alibaba.druid.wall.WallFilter">
+		<property name="logViolation" value="false"></property>
+		<property name="throwException" value="false"></property>
+		<property name="config" ref="wall-filter-config"></property>
+	</bean>
+	<bean id="stat-filter" class="com.alibaba.druid.filter.stat.StatFilter">
+		<property name="mergeSql" value="true" />
+	</bean>
+	<bean id="parentDataSource" abstract="true">
+		<!-- 配置初始化大小、最小、最大 -->
+		<property name="initialSize" value="1" />
+		<property name="minIdle" value="1" />
+		<property name="maxActive" value="60" />
+
+		<!-- 配置获取连接等待超时的时间 -->
+		<property name="maxWait" value="6000" />
+
+		<!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+
+		<!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+		<property name="minEvictableIdleTimeMillis" value="300000" />
+
+		<property name="validationQuery" value="SELECT 1 FROM DUAL" />
+		<property name="testWhileIdle" value="true" />
+		<property name="testOnBorrow" value="false" />
+		<property name="testOnReturn" value="false" />
+
+		<!-- 打开PSCache，并且指定每个连接上PSCache的大小 -->
+		<property name="poolPreparedStatements" value="true" />
+		<property name="maxPoolPreparedStatementPerConnectionSize" value="20" />
+		<property name="proxyFilters">
+			<list>
+				<ref bean="wall-filter" />
+				<ref bean="stat-filter" />
+			</list>
+		</property>
+		<property name="filters" value="slf4j" />
+		<property name="connectionProperties" value="druid.stat.slowSqlMillis=100" />
+	</bean>
+
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close"
+		parent="parentDataSource">
+		<property name="url" value="${sys.jdbc.datasourse.svd.url}" />
+		<property name="username" value="${sys.jdbc.datasourse.svd.username}" />
+		<property name="password" value="${sys.jdbc.datasourse.svd.password}" />
+	</bean>
+
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="META-INF/conf/svd/hibernate-cfg.xml" />
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.Oracle9iDialect</prop>
+				<prop key="hibernate.jdbc.batch_size">0</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+				<prop key="hibernate.use_outer_join">false</prop>
+				<prop key="javax.persistence.validation.mode">none</prop>
+			</props>
+		</property>
+		<property name="entityInterceptor">
+			<bean class="com.chsi.framework.hibernate.AuditInterceptor" />
+		</property>
+	</bean>
+
+	<!-- version -->
+	<bean id="hibernateEventWiring" class="com.chsi.framework.hibernate.HibernateEventWiring">
+		<constructor-arg ref="sessionFactory" />
+		<property name="flushEvenetListener" ref="flushEventListener" />
+		<property name="postUpdateEvenetListener" ref="versionEventListener" />
+		<property name="postInsertEvenetListener" ref="versionEventListener" />
+		<property name="postDeleteEvenetListener" ref="versionEventListener" />
+	</bean>
+	<bean id="locatorVersion" class="com.chsi.framework.service.BeanLocator" init-method="init">
+		<property name="beanFactoryLocatorKey" value="servicelayer-context-svd-version" />
+		<property name="factoryLocatorSelector" value="META-INF/conf/svd/beanRefContext.xml" />
+		<property name="dbProviderName" value="dbProvider" />
+	</bean>
+	<bean id="baseDbServiceVersion" class="com.chsi.version.service.impl.VersionServiceImpl" abstract="true" init-method="create" destroy-method="remove">
+		<property name="locator" ref="locatorVersion" />
+	</bean>
+	<bean id="versionService" class="com.chsi.version.service.impl.VersionServiceImpl" parent="baseDbServiceVersion" />
+	<bean id="versionEventListener" class="com.chsi.version.listener.VersionsEventListener">
+		<property name="versionService" ref="versionService" />
+	</bean>
+	<bean id="flushEventListener" class="com.chsi.version.listener.VersionIdFlushEventListener" />
+	<!-- version end -->
+
+	<!-- for chsi new framework -->
+	<bean id="daoInvocationHander" class="java.lang.String">
+		<constructor-arg value="com.chsi.framework.hibernate.HibernateDAOInvocationHandler" />
+	</bean>
+
+	<bean id="dbProvider" class="com.chsi.framework.service.HibernateDbProvider">
+		<property name="daoInvocationHander" ref="daoInvocationHander" />
+	</bean>
+	<bean id="parentDAO" abstract="true">
+		<property name="sessionFactory">
+			<ref local="sessionFactory" />
+		</property>
+	</bean>
+
+	<bean id="parentCacheDAO" class="com.chsi.framework.hibernate.BaseHibernateDAO" abstract="true">
+		<property name="sessionFactory" ref="sessionFactory" />
+<!--		<property name="cacheClient" ref="cacheClient" />-->
+	</bean>
+	<!-- end -->
+<!--	<bean id="cacheClient" class="com.chsi.cache.memcached.spy.SpyMemcachedClientFactory"-->
+<!--		factory-method="getSpyMemcachedClient">-->
+<!--		<constructor-arg type="java.lang.String" value="${sys.cache.corp.poolname}" />-->
+<!--		<constructor-arg type="java.lang.String" value="${sys.cache.corp.appname}" />-->
+<!--		<constructor-arg type="java.lang.String" value="com.chsi.cache.cfg.RemotePoolConfigServiceImpl" />-->
+<!--	</bean>-->
+
+<!--	<bean id="distributedLock" class="com.chsi.framework.concurrent.lock.MemcachebasedDistributedLock">-->
+<!--		<property name="cacheClient" ref="cacheClient" />-->
+<!--		<property name="lockExpireTimeInSec" value="120" />-->
+<!--	</bean>-->
+
+
+	<!-- DAO -->
+	<bean id="componentDao" class="com.chsi.svd.dao.hibernate.ComponentDaoImpl" parent="parentDAO"></bean>
+	<bean id="cveDao" class="com.chsi.svd.dao.hibernate.CveDaoImpl" parent="parentDAO"></bean>
+<!--	<bean id="corpCheckFailedDAO" class="com.chsi.corp.dwk.dao.hibernate.CorpCheckFailedDAOImpl" parent="parentDAO"></bean>-->
+<!--	<bean id="corpCheckPassDAO" class="com.chsi.corp.dwk.dao.hibernate.CorpCheckPassDAOImpl" parent="parentDAO"></bean>-->
+<!--	<bean id="corpCheckWaitDAO" class="com.chsi.corp.dwk.dao.hibernate.CorpCheckWaitDAOImpl" parent="parentDAO"></bean>-->
+<!--	<bean id="corpDyLogDAO" class="com.chsi.corp.dwk.dao.hibernate.CorpDyLogDAOImpl" parent="parentDAO"></bean>-->
+<!--	<bean id="corpGsbbRecordDAO" class="com.chsi.corp.dwk.dao.hibernate.CorpGsbbRecordDAOImpl" parent="parentDAO"></bean>-->
+<!--	<bean id="corpTycRecordDAO" class="com.chsi.corp.dwk.dao.hibernate.CorpTycRecordDAOImpl" parent="parentDAO"></bean>-->
+
+<!--	<bean id="accountDAO" class="com.chsi.corp.account.dao.hibernate.AccountDAOImpl" parent="parentDAO"></bean>-->
+<!--	<bean id="handleLogDAO" class="com.chsi.corp.log.dao.hibernate.HandleLogDAOImpl" parent="parentDAO"></bean>-->
+<!--	<bean id="loginLogDAO" class="com.chsi.corp.log.dao.hibernate.LoginLogDAOImpl" parent="parentDAO"></bean>-->
+<!--	<bean id="rgCheckDAO" class="com.chsi.corp.dwk.dao.hibernate.RgCheckDAOImpl" parent="parentDAO"></bean>-->
+<!--	<bean id="dictionaryDAO" class="com.chsi.corp.dwk.dao.hibernate.DictionaryDAOImpl" parent="parentDAO"></bean>-->
+<!--	<bean id="companyInfoDAO" class="com.chsi.corp.dwk.dao.hibernate.CompanyInfoDAOImpl" parent="parentDAO"></bean>-->
+</beans>

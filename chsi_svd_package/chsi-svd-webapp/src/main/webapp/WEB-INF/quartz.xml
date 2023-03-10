@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- QUARTZ相关配置 -->
+    <!-- 任务类 -->
+
+    <!-- 核验通过单位信息自动更新定时任务 -->
+<!--    <bean id="checkPassAutoUpdateTask" class="com.chsi.corp.web.quartz.CheckPassAutoUpdateTask">-->
+<!--        <property name="redisUtil" ref="redisUtil"/>-->
+<!--        <property name="corpCheckPassService" ref="corpCheckPassService"/>-->
+<!--        <property name="checkPassAutoUpdateConfig" ref="checkPassAutoUpdateConfig"/>-->
+<!--        <property name="checkPassAutoUpdateCall" ref="checkPassAutoUpdateCall"/>-->
+<!--    </bean>-->
+<!--    <bean id="autoUpdateDetails" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">-->
+<!--        <property name="targetObject" ref="checkPassAutoUpdateTask"/>-->
+<!--        <property name="targetMethod" value="startAutoUpdateJob"/>-->
+<!--    </bean>-->
+<!--    <bean id="autoUpdateCronTiggerBean" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">-->
+<!--        <property name="jobDetail" ref="autoUpdateDetails"/>-->
+<!--        <property name="cronExpression" value="0 0 22 * * ? "/>&lt;!&ndash;{秒] [分] [时] [日] [月] [周] [年] &ndash;&gt;-->
+<!--    </bean>-->
+
+
+
+<!--    &lt;!&ndash; start重置事业单位接口、机关单位接口调查次数定时任务 &ndash;&gt;-->
+<!--    <bean id="corpCallNumDetails" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">-->
+<!--        <property name="targetObject" ref="remoteCheckInterfaceCallTask"/>-->
+<!--        <property name="targetMethod" value="startSetCallNumJob"/>-->
+<!--    </bean>-->
+<!--    &lt;!&ndash; 触发器 &ndash;&gt;-->
+<!--    <bean id="corpCallNumCronTiggerBean" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">-->
+<!--        <property name="jobDetail" ref="corpCallNumDetails"/>-->
+<!--        <property name="cronExpression" value="0 0 0 * * ? "/>&lt;!&ndash;{秒] [分] [时] [日] [月] [周] [年] &ndash;&gt;-->
+<!--    </bean>-->
+<!--    &lt;!&ndash; end重置事业单位接口、机关单位接口调查次数定时任务 &ndash;&gt;-->
+
+
+
+<!--    &lt;!&ndash; start工商总局获取密钥定时任务 &ndash;&gt;-->
+<!--    <bean id="corpSercetTask" class="com.chsi.corp.web.quartz.CorpSercetTask">-->
+<!--        <property name="redisUtil" ref="redisUtil"/>-->
+<!--    </bean>-->
+<!--    <bean id="corpSercetDetails" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">-->
+<!--        <property name="targetObject" ref="corpSercetTask"/>-->
+<!--        <property name="targetMethod" value="startJob"/>-->
+<!--    </bean>-->
+<!--    &lt;!&ndash; 触发器 &ndash;&gt;-->
+<!--    <bean id="corpSercetCronTiggerBean" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">-->
+<!--        <property name="jobDetail" ref="corpSercetDetails"/>-->
+<!--        <property name="cronExpression" value="0 10 0 * * ? "/>&lt;!&ndash;{秒] [分] [时] [日] [月] [周] [年] &ndash;&gt;-->
+<!--    </bean>-->
+<!--    &lt;!&ndash; end工商总局获取密钥定时任务 &ndash;&gt;-->
+
+<!--    &lt;!&ndash; start事业单位获取密钥定时任务 &ndash;&gt;-->
+<!--    <bean id="sydwSecretTask" class="com.chsi.corp.web.quartz.SydwSecretTask">-->
+<!--        <property name="redisUtil" ref="redisUtil"/>-->
+<!--    </bean>-->
+<!--    <bean id="sydwSecretDetails" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">-->
+<!--        <property name="targetObject" ref="sydwSecretTask"/>-->
+<!--        <property name="targetMethod" value="startJob"/>-->
+<!--    </bean>-->
+<!--    &lt;!&ndash; 触发器 &ndash;&gt;-->
+<!--    <bean id="sydwSecretCronTiggerBean" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">-->
+<!--        <property name="jobDetail" ref="sydwSecretDetails"/>-->
+<!--        <property name="cronExpression" value="0 10 0 * * ? "/>&lt;!&ndash;{秒] [分] [时] [日] [月] [周] [年] &ndash;&gt;-->
+<!--    </bean>-->
+<!--    &lt;!&ndash; end事业单位获取密钥定时任务 &ndash;&gt;-->
+
+
+<!--    &lt;!&ndash; 调度器工厂 &ndash;&gt;-->
+<!--    <bean id="startQuartz" lazy-init="false" autowire="no"-->
+<!--            class="org.springframework.scheduling.quartz.SchedulerFactoryBean">-->
+<!--        <property name="triggers">-->
+<!--            <list>-->
+<!--                <ref bean="autoUpdateCronTiggerBean"/>-->
+<!--                <ref bean="corpCallNumCronTiggerBean"/>-->
+<!--                <ref bean="corpSercetCronTiggerBean"/>-->
+<!--                <ref bean="sydwSecretCronTiggerBean"/>-->
+<!--            </list>-->
+<!--        </property>-->
+<!--    </bean>-->
+
+    <import resource="quartz-checkWait.xml"/>
+    <import resource="quartz-rgCheck.xml"/>
+</beans>

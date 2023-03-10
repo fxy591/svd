@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="gb2312"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+ <bean class="com.chsi.framework.config.spring.ConfigurablePropertyPlaceholder">
+        <property name="propertyLocationSystemProperty" value="propertyPath"/>
+        <property name="defaultPropertyFileName" value="server.properties"/>
+        <property name="ignoreResourceNotFound" value="false"/>
+    </bean>
+
+    <bean id="wall-filter-config" class="com.alibaba.druid.wall.WallConfig">
+        <property name="selectIntoAllow" value="false"/>
+        <property name="replaceAllow" value="false"/>
+        <property name="mergeAllow" value="false"/>
+        <property name="callAllow" value="false"/>
+        <property name="setAllow" value="false"/>
+        <property name="truncateAllow" value="false"/>
+        <property name="createTableAllow" value="false"/>
+        <property name="alterTableAllow" value="false"/>
+        <property name="dropTableAllow" value="false"/>
+        <property name="deleteWhereNoneCheck" value="true"/>
+        <property name="updateWhereNoneCheck" value="true"/>
+        <property name="conditionAndAlwayTrueAllow" value="true"/>
+        <property name="conditionAndAlwayFalseAllow" value="true"/>
+        <property name="mustParameterized" value="false"/>
+    </bean>
+
+    <bean id="wall-filter" class="com.alibaba.druid.wall.WallFilter">
+        <property name="logViolation" value="true"/>
+        <property name="throwException" value="false"/>
+        <property name="config" ref="wall-filter-config"/>
+    </bean>
+
+    <bean id="stat-filter" class="com.alibaba.druid.filter.stat.StatFilter">
+        <property name="mergeSql" value="true"/>
+    </bean>
+
+    <bean id="parentDataSource" abstract="true">
+        <!-- ???ó??????С????С????? -->
+        <property name="initialSize" value="1"/>
+        <property name="minIdle" value="1"/>
+        <property name="maxActive" value="80"/>
+        <!-- ???????????????????? -->
+        <property name="maxWait" value="20000"/>
+        <!-- ???ü????ò??????μ??????????????????????λ????? -->
+        <property name="timeBetweenEvictionRunsMillis" value="60000"/>
+        <!-- ??????????????????С??????????λ????? -->
+        <property name="minEvictableIdleTimeMillis" value="300000"/>
+        <property name="validationQuery" value="SELECT 1 FROM DUAL"/>
+        <property name="testWhileIdle" value="true"/>
+        <property name="testOnBorrow" value="false"/>
+        <property name="testOnReturn" value="false"/>
+        <!-- ??PSCache??????????????????PSCache???С -->
+        <property name="poolPreparedStatements" value="true"/>
+        <property name="maxPoolPreparedStatementPerConnectionSize" value="20"/>
+        <property name="proxyFilters">
+            <list>
+                <ref bean="wall-filter"/>
+                <ref bean="stat-filter"/>
+            </list>
+        </property>
+        <property name="filters" value="slf4j"/>
+        <property name="connectionProperties" value="druid.stat.slowSqlMillis=100"/>
+    </bean>
+
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close" parent="parentDataSource">
+        <property name="url" value="${sys.jdbc.datasourse.svd.url}"/>
+        <property name="username" value="${sys.jdbc.datasourse.svd.username}"/>
+        <property name="password" value="${sys.jdbc.datasourse.svd.password}"/>
+    </bean>
+
+    <bean id="versionSessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <property name="dataSource">
+            <ref local="dataSource"/>
+        </property>
+        <property name="annotatedClasses">
+            <list>
+                <value>com.chsi.version.pojo.VersionLogPojo</value>
+            </list>
+        </property>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.Oracle9iDialect</prop>
+                <prop key="hibernate.jdbc.batch_size">0</prop>
+                <prop key="hibernate.show_sql">false</prop>
+                <prop key="hibernate.use_outer_join">false</prop>
+                <prop key="javax.persistence.validation.mode">none</prop>
+            </props>
+        </property>
+    </bean>
+
+
+    <bean id="versionDAO" class="com.chsi.version.dao.hibernate.VersionDaoImpl">
+        <property name="sessionFactory" ref="versionSessionFactory"/>
+    </bean>
+
+    <bean id="daoInvocationHander" class="java.lang.String">
+        <constructor-arg value="com.chsi.framework.hibernate.HibernateDAOInvocationHandler"/>
+    </bean>
+
+    <bean id="dbProvider" class="com.chsi.framework.service.HibernateDbProvider">
+        <property name="daoInvocationHander" ref="daoInvocationHander"/>
+    </bean>
+</beans>
