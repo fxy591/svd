@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <name>Chsi application</name>
+  <url>http://www.chsi.com.cn/</url>
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.chsi</groupId>
+    <version>1.0.2</version>
+    <artifactId>chsi-project</artifactId>
+  </parent>
+
+  <groupId>com.chsi</groupId>
+  <version>1.0-SNAPSHOT</version>
+  <artifactId>chsi_svd_package</artifactId>
+  <packaging>pom</packaging>
+
+  <modules>
+    <module>chsi-svd</module>
+    <module>chsi-svd-webapp</module>
+  </modules>
+
+  <scm>
+    <connection>scm:svn:https://svn.chsi.com.cn/svn/repos/chsicommunity/kxcjd/trunk</connection>
+    <developerConnection>scm:svn:https://svn.chsi.com.cn/svn/repos/chsicommunity/kxcjd/trunk</developerConnection>
+  </scm>
+  <repositories>
+    <repository>
+      <id>chsi</id>
+      <name>Chsi Repository</name>
+      <layout>default</layout>
+      <url>http://maven.chsi.com.cn/maven2</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+
+  <build>
+    <sourceDirectory>src/main/java</sourceDirectory>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+          <encoding>UTF-8</encoding>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>3.0.2</version>
+        <configuration>
+          <encoding>UTF-8</encoding>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-eclipse-plugin</artifactId>
+        <version>2.7</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-scm-plugin</artifactId>
+        <version>1.8</version>
+        <configuration>
+          <connectionType>developerConnection</connectionType>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>2.3.2</version>
+        <configuration>
+          <tagBase>https://svn.chsi.com.cn/svn/repos/chsicommunity/kxcjd/tags</tagBase>
+        </configuration>
+      </plugin>
+    </plugins>
+    <extensions>
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-ftp</artifactId>
+        <version>2.2</version>
+      </extension>
+    </extensions>
+  </build>
+
+  <properties>
+    <!-- maven plugin's version -->
+    <chsi-project.version>1.0.2</chsi-project.version>
+    <chsi-dependency.version>1.0.1</chsi-dependency.version>
+    <spring-data-redis.version>1.6.0.RELEASE</spring-data-redis.version>
+    <quartz.version>2.2.1</quartz.version>
+    <quartz-jobs.version>2.2.1</quartz-jobs.version>
+    <!-- 覆盖父pom的chsi-account-client.version值 -->
+    <chsi-account-client.version>1.3.4-SNAPSHOT</chsi-account-client.version>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.chsi</groupId>
+      <artifactId>chsi-starter-test</artifactId>
+      <version>${chsi-project.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.chsi</groupId>
+      <artifactId>chsi-starter-framework</artifactId>
+      <version>${chsi-project.version}</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>chsi-cachecfg-remote</artifactId>
+          <groupId>com.chsi</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>chsi-commonutil-client</artifactId>
+          <groupId>com.chsi</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>chsi-encrypt-client</artifactId>
+          <groupId>com.chsi</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>chsi-memcachedclient</artifactId>
+          <groupId>com.chsi</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>com.chsi</groupId>
+      <artifactId>chsi-starter-springmvc</artifactId>
+      <version>${chsi-dependency.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>net.sf.json-lib</groupId>
+      <artifactId>json-lib</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.18.24</version>
+    </dependency>
+  </dependencies>
+</project>

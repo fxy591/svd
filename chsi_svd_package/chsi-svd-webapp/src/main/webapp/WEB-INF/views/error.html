@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>用人单位数据库后台管理系统</title>
+    <meta name="author" content="教育部学生服务与素质发展中心" />
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta http-equiv="x-dns-prefetch-control" content="on" />
+    <link rel="icon" href="https://t2.chei.com.cn/ncss/student/img/favicon.ico" type="image/x-icon" />
+    <link chsi:spath="path:/ncss/jycorp/css/app.css,commonResource:false" rel="stylesheet" />
+    <style>
+        .header-bl {
+            padding-left: 20px;
+            height: 72px;
+            line-height: 72px;
+            color: #fff;
+            font-weight: 700;
+            font-size: 26px;
+            background-color: #3091f2;
+        }
+    </style>
+</head>
+<body>
+    <div id="appLoading">
+        <div class="wq-loading">
+            <div class="spinner">
+                <div class="rect1"></div>
+                <div class="rect2"></div>
+                <div class="rect3"></div>
+                <div class="rect4"></div>
+                <div class="rect5"></div>
+            </div>
+        </div>
+    </div>
+    <div id="app" v-cloak style="display: none">
+        <div class="header-bl">
+            用人单位数据库后台管理系统
+        </div>
+        <i-content>
+            <div class="error-content">
+                <div class="icon-box">
+                    <Icon type="md-alert"></Icon>
+                </div>
+                <p class="error-p">OH，出错了！</p>
+                <div class="err-btnbl">
+                    <i-button type="primary" to="/admin/logout.html">退出</i-button>
+                </div>
+            </div>
+        </i-content>
+    </div>
+    <script type="text/javascript" src="https://t1.chei.com.cn/common/ch/browser/least-ie11.min.js"></script>
+    <script type="text/javascript" src="https://t1.chei.com.cn/common/js/vue/2.5.15/vue.min.js"></script>
+    <script type="text/javascript" src="https://t1.chei.com.cn/common/js/iview/4.1.1/iview.min.js"></script>
+    <script th:inline="javascript">
+        document.getElementsByTagName('body')[0].style.background = "#f0f9ff";
+        var app = new Vue({
+            el: "#app",
+            mixins: typeof mixin !== "undefined" ? [mixin] : {},
+            data: {
+            },
+            methods: {
+            },
+            filters: {
+            },
+            created: function () {
+                document.getElementById('app').style.display = 'block';
+                document.getElementById('appLoading').style.display = 'none';
+            },
+        });
+    </script>
+</body>
+</html>

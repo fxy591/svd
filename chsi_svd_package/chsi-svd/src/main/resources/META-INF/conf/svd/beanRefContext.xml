@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+    <bean id="servicelayer-context-svd" class="org.springframework.context.support.ClassPathXmlApplicationContext">
+        <constructor-arg>
+            <list>
+                <value>META-INF/conf/svd/context.xml</value>
+            </list>
+        </constructor-arg>
+    </bean>
+    
+    <bean id="servicelayer-context-svd-version" class="org.springframework.context.support.ClassPathXmlApplicationContext">
+        <constructor-arg>
+            <list>
+                <value>META-INF/conf/svd/chsi-svd-version.xml</value>
+            </list>
+        </constructor-arg>
+    </bean>
+</beans>

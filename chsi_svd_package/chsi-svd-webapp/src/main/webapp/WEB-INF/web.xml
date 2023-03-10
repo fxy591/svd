@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+    <display-name>corp</display-name>
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>
+           <!-- /WEB-INF/applicationContext-security.xml -->
+           /WEB-INF/applicationContext-svd.xml
+           <!-- /WEB-INF/quartz.xml -->
+            <!-- redis 配置中的 host 需改为本地 -->
+<!--            /WEB-INF/redis.xml-->
+        </param-value>
+    </context-param>
+
+
+    <!-- <context-param> -->
+    <!--     <param-name>Chsi.CsrfTokenRepository.Strategy</param-name> -->
+    <!--     <param-value>cookie</param-value> -->
+    <!-- </context-param> -->
+
+    <!-- <listener> -->
+    <!--     <listener-class>com.chsi.framework.csrf.web.listener.ChsiCsrfServletContextListener</listener-class> -->
+    <!-- </listener> -->
+
+  
+    <!--登录时获取request  -->
+    <listener>  
+    <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>  
+    </listener>  
+
+    <!-- 父子容器 -->
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+    <!-- 处理中文乱码问题 -->
+    <filter>
+        <filter-name>encoderfilter</filter-name>
+        <filter-class>com.chsi.framework.web.filter.EncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>utf-8</param-value>
+        </init-param>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>encoderfilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!-- <filter> -->
+    <!--     <filter-name>encodingFilter</filter-name> -->
+    <!--     <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class> -->
+    <!-- <init-param> -->
+    <!--     <param-name>encoding</param-name> -->
+    <!--     <param-value>utf-8</param-value> -->
+    <!-- </init-param> -->
+    <!-- </filter> -->
+    <!-- <filter-mapping> -->
+    <!--     <filter-name>encodingFilter</filter-name> -->
+    <!--     <url-pattern>/*</url-pattern> -->
+    <!-- </filter-mapping> -->
+
+    <filter>
+        <filter-name>reverseProxyIpFilter</filter-name>
+        <filter-class>com.chsi.framework.web.filter.SquidIpFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>reverseProxyIpFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+
+    <filter>
+        <filter-name>userInputSecureFilter</filter-name>
+        <filter-class>com.chsi.framework.web.filter.UserInputSecureFilter</filter-class>
+        <!-- <init-param> -->
+        <!--     <param-name>monitorXss</param-name> -->
+        <!--     <param-value>true</param-value> -->
+        <!-- </init-param> -->
+        <!--上传文件白名单 -->
+        <!-- <init-param> -->
+        <!--     <param-name>multipartFormDataUris</param-name> -->
+        <!--     <param-value>/admin/checkpass/batchadd</param-value> -->
+        <!-- </init-param> -->
+        <!--允许含有中括号参数的表单提交-->
+		<!-- <init-param> -->
+		<!-- 	<param-name>enableParamNameArrayLike</param-name> -->
+		<!-- 	<param-value>true</param-value> -->
+		<!-- </init-param> -->
+    </filter>
+
+    <filter-mapping>
+        <filter-name>userInputSecureFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+
+	<!-- <filter> -->
+    <!--     <filter-name>jsessionid</filter-name> -->
+	<!--     <filter-class> -->
+    <!--       com.chsi.svd.web.filter.RemoveUrlSessionFilter -->
+    <!--     </filter-class> -->
+	<!-- </filter> -->
+	<!-- <filter-mapping> -->
+	<!--    <filter-name>jsessionid</filter-name> -->
+	<!--    <url-pattern>/*</url-pattern> -->
+	<!-- </filter-mapping> -->
+
+    <!-- <filter> -->
+    <!--     <filter-name>chsiCsrfFilter</filter-name> -->
+    <!--     <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class> -->
+    <!-- </filter> -->
+
+    <!-- <filter-mapping> -->
+    <!--     <filter-name>chsiCsrfFilter</filter-name> -->
+    <!--     <url-pattern>/*</url-pattern> -->
+    <!-- </filter-mapping> -->
+
+   <!-- <filter> -->
+   <!--     <filter-name>corpCallInfo</filter-name> -->
+   <!--     <filter-class>com.chsi.corp.web.filter.CorpCallInfoFilter</filter-class> -->
+   <!-- </filter> -->
+
+   <!-- <filter-mapping> -->
+   <!--     <filter-name>corpCallInfo</filter-name> -->
+   <!--     <url-pattern>/*</url-pattern> -->
+   <!-- </filter-mapping> -->
+
+
+   <error-page>
+		<error-code>500</error-code>
+		<location>/WEB-INF/views/404.html</location>
+	</error-page>
+	<error-page>
+		<error-code>404</error-code>
+		<location>/WEB-INF/views/404.html</location>
+	</error-page>
+
+   <!-- 引入servlet配置文件 -->
+    <servlet>
+        <!-- 可任意取名，配对即可 -->
+        <servlet-name>svd</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <!-- 指定springmvc配置文件的路径 -->
+        <!-- <init-param> -->
+        <!--     <param-name>contextConfigLocation</param-name> -->
+        <!--     <param-value>classpath:../webapp/WEB-INF/svd-servlet.xml</param-value> -->
+        <!-- </init-param> -->
+        <!-- SpringMVC默认配置文件的名字，放置位置是 -->
+        <!-- /WEB-INF/[servlet-name]-servlet.xml -->
+        <!-- 本servlet在tomcat启动时就会被创建 -->
+        <!-- <load-on-startup>1</load-on-startup> -->
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>svd</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+</web-app>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- QUARTZ相关配置 -->
+
+    <!-- 人工核验单位调用接口核验定时任务 -->
+<!--    <bean id="rgCheckInterfaceCallTask" class="com.chsi.corp.web.quartz.RgCheckInterfaceCallTask">-->
+<!--        <property name="redisUtil" ref="redisUtil"/>-->
+<!--        <property name="rgCheckService" ref="rgCheckService"/>-->
+<!--        <property name="rgCheckCall" ref="rgCheckCall"/>-->
+<!--    </bean>-->
+
+<!--    &lt;!&ndash; start调用天眼查接口定时任务 &ndash;&gt;-->
+<!--    <bean id="rgCheckTycDetails" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">-->
+<!--        <property name="targetObject" ref="rgCheckInterfaceCallTask"/>-->
+<!--        <property name="targetMethod" value="startTycJob"/>-->
+<!--    </bean>-->
+<!--    &lt;!&ndash; 触发器 &ndash;&gt;-->
+<!--    <bean id="rgTycCronTiggerBean" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">-->
+<!--        <property name="jobDetail" ref="rgCheckTycDetails"/>-->
+<!--        <property name="cronExpression" value="0 /5 * * * ? "/>&lt;!&ndash;{秒] [分] [时] [日] [月] [周] [年] &ndash;&gt;-->
+<!--    </bean>-->
+<!--    &lt;!&ndash; end调用天眼查接口定时任务 &ndash;&gt;-->
+
+<!--    &lt;!&ndash; start调用工商接口定时任务 &ndash;&gt;-->
+<!--    <bean id="rgGsDetails" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">-->
+<!--        <property name="targetObject" ref="rgCheckInterfaceCallTask"/>-->
+<!--        <property name="targetMethod" value="startGsJob"/>-->
+<!--    </bean>-->
+<!--    &lt;!&ndash; 触发器 &ndash;&gt;-->
+<!--    <bean id="rgGsCronTiggerBean" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">-->
+<!--        <property name="jobDetail" ref="rgGsDetails"/>-->
+<!--        <property name="cronExpression" value="0 /5 * * * ? "/>&lt;!&ndash;{秒] [分] [时] [日] [月] [周] [年] &ndash;&gt;-->
+<!--    </bean>-->
+<!--    &lt;!&ndash; end调用工商接口定时任务 &ndash;&gt;-->
+
+<!--    &lt;!&ndash; start调用事业单位接口定时任务 &ndash;&gt;-->
+<!--    <bean id="rgSydwDetails" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">-->
+<!--        <property name="targetObject" ref="rgCheckInterfaceCallTask"/>-->
+<!--        <property name="targetMethod" value="startSydwJob"/>-->
+<!--    </bean>-->
+<!--    &lt;!&ndash; 触发器 &ndash;&gt;-->
+<!--    <bean id="rgSydwCronTiggerBean" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">-->
+<!--        <property name="jobDetail" ref="rgSydwDetails"/>-->
+<!--        <property name="cronExpression" value="0 /5 * * * ? "/>&lt;!&ndash;{秒] [分] [时] [日] [月] [周] [年] &ndash;&gt;-->
+<!--    </bean>-->
+<!--    &lt;!&ndash; end调用事业单位接口定时任务 &ndash;&gt;-->
+
+<!--    &lt;!&ndash; start调用机关单位接口定时任务 &ndash;&gt;-->
+<!--    <bean id="rgJgdwDetails" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">-->
+<!--        <property name="targetObject" ref="rgCheckInterfaceCallTask"/>-->
+<!--        <property name="targetMethod" value="startJgdwJob"/>-->
+<!--    </bean>-->
+<!--    &lt;!&ndash; 触发器 &ndash;&gt;-->
+<!--    <bean id="rgJgdwCronTiggerBean" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">-->
+<!--        <property name="jobDetail" ref="rgJgdwDetails"/>-->
+<!--        <property name="cronExpression" value="0 /5 * * * ? "/>&lt;!&ndash;{秒] [分] [时] [日] [月] [周] [年] &ndash;&gt;-->
+<!--    </bean>-->
+<!--    &lt;!&ndash; end调用机关单位接口定时任务 &ndash;&gt;-->
+
+<!--    &lt;!&ndash; start调用民政接口定时任务 &ndash;&gt;-->
+<!--    <bean id="rgMzDetails" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">-->
+<!--        <property name="targetObject" ref="rgCheckInterfaceCallTask"/>-->
+<!--        <property name="targetMethod" value="startMzJob"/>-->
+<!--    </bean>-->
+<!--    &lt;!&ndash; 触发器 &ndash;&gt;-->
+<!--    <bean id="rgMzCronTiggerBean" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">-->
+<!--        <property name="jobDetail" ref="rgMzDetails"/>-->
+<!--        <property name="cronExpression" value="0 /2 * * * ? "/>&lt;!&ndash;{秒] [分] [时] [日] [月] [周] [年] &ndash;&gt;-->
+<!--    </bean>-->
+    <!-- end调用民政接口定时任务 -->
+
+    <!-- 调度器工厂 -->
+<!--    <bean id="startRgCheckQuartz" lazy-init="false" autowire="no"-->
+<!--            class="org.springframework.scheduling.quartz.SchedulerFactoryBean">-->
+<!--        <property name="triggers">-->
+<!--            <list>-->
+<!--                <ref bean="rgTycCronTiggerBean"/>-->
+<!--                <ref bean="rgGsCronTiggerBean"/>-->
+<!--                <ref bean="rgSydwCronTiggerBean"/>-->
+<!--                <ref bean="rgJgdwCronTiggerBean"/>-->
+<!--                <ref bean="rgMzCronTiggerBean"/>-->
+<!--            </list>-->
+<!--        </property>-->
+<!--    </bean>-->
+
+</beans>
